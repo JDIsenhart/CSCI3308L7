@@ -24,7 +24,7 @@ var pgp = require('pg-promise')();
 **********************/
 const dbConfig = {
 	host: 'localhost',
-	port: 5432,
+	port: 5433,	 /*5433 for Windows, 5432 for Linux*/
 	database: 'football_db',
 	user: 'postgres',
 	password: 'admin'
@@ -95,6 +95,29 @@ app.get('/register', function(req, res) {
 	});
 });
 
+app.get('/home', function(req, res) {
+	var query = 'select * from favorite_colors;';
+	db.any(query)
+		.then(function (rows) {
+			res.render('pages/home',{
+				my_title: "Home Page",
+				data: rows,
+				color: '',
+				color_msg: ''
+			})
+
+		})
+		.catch(function (err) {
+			// display error message in case an error
+			request.flash('error', err);
+			response.render('pages/home', {
+				title: 'Home Page',
+				data: '',
+				color: '',
+				color_msg: ''
+			})
+		})
+});
 /*Add your other get/post request handlers below here: */
 
 
